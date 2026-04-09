@@ -1,149 +1,163 @@
 import random
 
-QUESTIONS = {
-
-# ================= MATHEMATICS =================
-"Mathematics": [
-
-# Algebra (HIGH FREQUENCY)
-{"q": "Solve: 2x + 7 = 3x - 5",
- "o": ["10", "12", "8", "6"],
- "a": "12",
- "exp": "2x + 7 = 3x - 5 → x = 12"},
-
-{"q": "If x² - 9 = 0, find x",
- "o": ["3", "-3", "±3", "9"],
- "a": "±3",
- "exp": "x² = 9 → x = ±3"},
-
-{"q": "Simplify: (x + 2)(x - 2)",
- "o": ["x² - 4", "x² + 4", "x² - 2", "x² + 2"],
- "a": "x² - 4",
- "exp": "(a+b)(a-b)=a²-b²"},
-
-# Trigonometry
-{"q": "tan 45° = ?",
- "o": ["0", "1", "√3", "1/2"],
- "a": "1",
- "exp": "Standard trig value"},
-
-{"q": "sin²θ + cos²θ = ?",
- "o": ["1", "0", "2", "-1"],
- "a": "1",
- "exp": "Basic identity"},
-
-# Probability
-{"q": "Probability of getting a 6 on a die?",
- "o": ["1/6", "1/2", "1/3", "6"],
- "a": "1/6",
- "exp": "1 favorable out of 6"}
-],
-
-# ================= ENGLISH =================
-"English": [
-
-# Lexis & Structure (VERY IMPORTANT)
-{"q": "Choose correct: Neither the teacher nor the students _____ ready.",
- "o": ["is", "are", "was", "be"],
- "a": "are",
- "exp": "Verb agrees with nearest subject (students)"},
-
-{"q": "She has been waiting _____ two hours.",
- "o": ["since", "for", "from", "at"],
- "a": "for",
- "exp": "Use 'for' with duration"},
-
-# Synonyms
-{"q": "Synonym of 'obtain'?",
- "o": ["lose", "get", "reject", "avoid"],
- "a": "get",
- "exp": "Obtain means get"},
-
-# Antonyms
-{"q": "Opposite of 'hostile'?",
- "o": ["friendly", "angry", "violent", "rude"],
- "a": "friendly",
- "exp": "Hostile = unfriendly"},
-
-# Interpretation
-{"q": "He kicked the bucket means?",
- "o": ["played football", "died", "ran away", "fell"],
- "a": "died",
- "exp": "Idiom meaning"}
-],
-
-# ================= PHYSICS =================
-"Physics": [
-
-# Mechanics
-{"q": "A body of mass 2kg accelerates at 3m/s². Force = ?",
- "o": ["6N", "5N", "3N", "2N"],
- "a": "6N",
- "exp": "F = ma = 2 × 3 = 6N"},
-
-{"q": "Velocity = ?",
- "o": ["distance/time", "displacement/time", "force/time", "mass/time"],
- "a": "displacement/time",
- "exp": "Velocity uses displacement"},
-
-# Electricity
-{"q": "V = IR is known as?",
- "o": ["Newton law", "Ohm's law", "Hooke law", "Faraday law"],
- "a": "Ohm's law",
- "exp": "Basic electricity law"}
-],
-
-# ================= CHEMISTRY =================
-"Chemistry": [
-
-# Atomic Structure
-{"q": "Mass number = ?",
- "o": ["protons", "protons + neutrons", "electrons", "atoms"],
- "a": "protons + neutrons",
- "exp": "Mass number = p + n"},
-
-# Bonding
-{"q": "Covalent bond involves?",
- "o": ["sharing", "transfer", "loss", "gain"],
- "a": "sharing",
- "exp": "Electrons are shared"},
-
-# Acids & Bases
-{"q": "pH of neutral solution?",
- "o": ["0", "7", "14", "1"],
- "a": "7",
- "exp": "Neutral = 7"}
-],
-
-# ================= BIOLOGY =================
-"Biology": [
-
-# Cell Biology
-{"q": "Organelle responsible for energy?",
- "o": ["nucleus", "ribosome", "mitochondria", "cell wall"],
- "a": "mitochondria",
- "exp": "Produces ATP"},
-
-# Genetics
-{"q": "Trait passed from parents is?",
- "o": ["gene", "cell", "organ", "protein"],
- "a": "gene",
- "exp": "Genes carry traits"},
-
-# Physiology
-{"q": "Blood is pumped by?",
- "o": ["lungs", "brain", "heart", "kidney"],
- "a": "heart",
- "exp": "Heart pumps blood"}
-]
+TOPICS = {
+    "Mathematics": {
+        "core": ["Algebra", "Trigonometry", "Geometry", "Probability"],
+        "extra": ["Sets", "Indices"]
+    },
+    "English": {
+        "core": ["Grammar", "Lexis", "Comprehension", "Synonyms"],
+        "extra": ["Antonyms", "Sentence Correction"]
+    },
+    "Physics": {
+        "core": ["Mechanics", "Electricity", "Waves"],
+        "extra": ["Heat"]
+    },
+    "Chemistry": {
+        "core": ["Atomic Structure", "Bonding", "Acids"],
+        "extra": ["Periodic Table"]
+    },
+    "Biology": {
+        "core": ["Cell Biology", "Genetics", "Ecology"],
+        "extra": ["Nutrition"]
+    }
 }
 
-def generate_questions(subject, count=20):
-    q = QUESTIONS[subject][:]
-    random.shuffle(q)
 
-    while len(q) < count:
-        q.extend(QUESTIONS[subject])
-        random.shuffle(q)
+def generate_question(subject):
+    import random
 
-    return q[:count]
+    topic_group = TOPICS[subject]
+
+    # 70% core, 30% extra
+    if random.random() < 0.7:
+        topic = random.choice(topic_group["core"])
+    else:
+        topic = random.choice(topic_group["extra"])
+
+    # ---------------- MATHEMATICS ----------------
+    if subject == "Mathematics":
+
+        if topic == "Algebra":
+            x = random.randint(2, 10)
+            b = random.randint(1, 20)
+
+            return {
+                "q": f"Solve: 2x + {b} = {2*x + b}",
+                "options": {
+                    "A": str(x),
+                    "B": str(x+1),
+                    "C": str(x-1),
+                    "D": str(x+2)
+                },
+                "answer": "A",
+                "exp": "Isolate x then divide by 2",
+                "topic": "Algebra"
+            }
+
+        if topic == "Trigonometry":
+            return {
+                "q": "sin 30° = ?",
+                "options": {
+                    "A": "1",
+                    "B": "1/2",
+                    "C": "0",
+                    "D": "√3"
+                },
+                "answer": "B",
+                "exp": "Standard trig value",
+                "topic": "Trigonometry"
+            }
+
+        if topic == "Probability":
+            return {
+                "q": "Probability of head in a fair coin toss?",
+                "options": {
+                    "A": "1",
+                    "B": "1/3",
+                    "C": "1/2",
+                    "D": "2"
+                },
+                "answer": "C",
+                "exp": "1 favorable / 2 outcomes",
+                "topic": "Probability"
+            }
+
+    # ---------------- ENGLISH ----------------
+    if subject == "English":
+
+        if topic == "Grammar":
+            return {
+                "q": "She ____ to school yesterday.",
+                "options": {
+                    "A": "go",
+                    "B": "goes",
+                    "C": "went",
+                    "D": "going"
+                },
+                "answer": "C",
+                "exp": "Past tense required",
+                "topic": "Grammar"
+            }
+
+        if topic == "Synonyms":
+            return {
+                "q": "Synonym of 'rapid'?",
+                "options": {
+                    "A": "slow",
+                    "B": "fast",
+                    "C": "weak",
+                    "D": "late"
+                },
+                "answer": "B",
+                "exp": "Rapid means fast",
+                "topic": "Synonyms"
+            }
+
+    # ---------------- PHYSICS ----------------
+    if subject == "Physics":
+
+        return {
+            "q": "Force is equal to?",
+            "options": {
+                "A": "mv",
+                "B": "ma",
+                "C": "m/a",
+                "D": "v/t"
+            },
+            "answer": "B",
+            "exp": "Newton's second law: F = ma",
+            "topic": topic
+        }
+
+    # ---------------- CHEMISTRY ----------------
+    if subject == "Chemistry":
+
+        return {
+            "q": "Atomic number is number of?",
+            "options": {
+                "A": "neutrons",
+                "B": "protons",
+                "C": "electrons",
+                "D": "molecules"
+            },
+            "answer": "B",
+            "exp": "Atomic number = protons",
+            "topic": topic
+        }
+
+    # ---------------- BIOLOGY ----------------
+    if subject == "Biology":
+
+        return {
+            "q": "Basic unit of life is?",
+            "options": {
+                "A": "organ",
+                "B": "tissue",
+                "C": "cell",
+                "D": "system"
+            },
+            "answer": "C",
+            "exp": "Cell is the smallest unit of life",
+            "topic": topic
+        }
